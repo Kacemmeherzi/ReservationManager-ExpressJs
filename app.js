@@ -2,15 +2,20 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose') ;
 const dotenv = require('dotenv') ;
-app.use(express.json) ;
+app.use(express.json());
+const userController = require('./controllers/usercontroller.js');
+
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI  ;
  const PORT= process.env.PORT|| 3000 ;
-// Define a route
+app.use("/user",userController);
+
+
 app.get('/', (req, res) => {
-  res.send('Hello, Express!');
+  res.json('Hello, World!');
 });
-console.log (MONGO_URI)
+
+
 mongoose.connect(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
