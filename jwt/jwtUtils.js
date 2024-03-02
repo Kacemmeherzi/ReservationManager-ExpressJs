@@ -20,7 +20,7 @@ function verifytoken(token) {
     var  valid = true;
     var message ;
     const secretKey= process.env.SECRET_KEY ;
-    jwt.verify(token,secretKey, (err, decoded) => { console.log("aaaaaaaaa",decoded)
+    jwt.verify(token,secretKey, (err, decoded) => { //console.log("aaaaaaaaa",decoded)
         if (err) {
             message = err.message
           valid = false;

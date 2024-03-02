@@ -13,7 +13,7 @@ const valid= await  bcrypt.compare(password,user.password) ;
 
       if (user&&valid) {
        const token = jwt.generateToken(user) ;
-       res.status(200).json(token)
+       res.status(200).json({"token":token})
       } else {
         res.status(404).json({ message: 'User not found' });
       }
