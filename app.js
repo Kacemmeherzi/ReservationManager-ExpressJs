@@ -14,11 +14,11 @@ const MONGO_URI = process.env.MONGO_URI  ;
 
 
 
+ app.use(["/proc/*"],tokenextract);
 
 app.use("/proc/user",userController);
 
 
-app.use(["/proc/*"],tokenextract);
 app.use("/auth",auth) ;
 
 
