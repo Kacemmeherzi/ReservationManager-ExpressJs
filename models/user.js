@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs') ;
 
 const userschema = new mongoose.Schema ( {
     username : {type : String ,unique  : true } ,password : {type :String, unique: false} 
-},{collation: "users"}
+},{collection: "users"}
 )
 
 userschema.pre('save' , async function (next){
