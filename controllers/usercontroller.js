@@ -4,7 +4,7 @@ const User = require('../models/user.js') ;
 
 
 
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -14,7 +14,7 @@ router.get('/users', async (req, res) => {
 });
 
 
-router.get('/users/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       if (user) {
@@ -46,7 +46,7 @@ router.get('/users/:id', async (req, res) => {
   });
   
   // Update an existing user
-  router.put('/users/:id', async (req, res) => {
+  router.put('/update/:id', async (req, res) => {
     try {
       const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (updatedUser) {
@@ -60,7 +60,7 @@ router.get('/users/:id', async (req, res) => {
   });
   
   // Delete a user
-  router.delete('/users/:id', async (req, res) => {
+  router.delete('/delete/:id', async (req, res) => {
     try {
       const deletedUser = await User.findByIdAndRemove(req.params.id);
       if (deletedUser) {
