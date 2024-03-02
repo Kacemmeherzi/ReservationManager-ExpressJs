@@ -55,21 +55,22 @@ router.get('/:id', async (req, res) => {
         res.status(404).json({ message: 'User not found' });
       }
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ "error type":error.name,"message": error.message });
     }
   });
   
   // Delete a user
   router.delete('/delete/:id', async (req, res) => {
     try {
-      const deletedUser = await User.findByIdAndRemove(req.params.id);
+      const userid = req.params.id
+      const deletedUser = await User.findByIdAndDelete(userid);
       if (deletedUser) {
         res.json({ message: 'User deleted successfully' });
       } else {
         res.status(404).json({ message: 'User not found' });
       }
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ "error type":error.name ,"message": error.message});
     }
   });
   
