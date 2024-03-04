@@ -8,19 +8,22 @@ const tokenextract = require('./jwt/jwtMiddleware.js')
 const userController = require('./controllers/usercontroller.js');
 const jwt = require('./jwt/jwtUtils.js')
 const auth  = require('./routes/auth.js')
+const roomcontroller = require('./controllers/roomcontroller.js')
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI  ;
  const PORT= process.env.PORT|| 3000 ;
 
 
-
- app.use(["/proc/*"],tokenextract);
-
+//ROUTES
+app.use(["/proc/*"],tokenextract);
 app.use("/proc/user",userController);
-
-
 app.use("/auth",auth) ;
+app.use("/room",roomcontroller)
 
+//SWAGGER
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 //Mongo connct

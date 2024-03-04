@@ -2,8 +2,24 @@ const express = require('express');
 const router = express.Router() ;
 const User = require('../models/user.js') ;
 
-
-
+/**
+ * @swagger
+ * servers:
+ *   - url: http://localhost:3000
+ *     description: Local development server
+ * /user:
+ *   get:
+ *     summary: Get  all users 
+ *     description: Retrieve all users by .
+ *     parameters:
+ *      
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful response with the user details
+ *       404:
+ *         description: User not found
+ */
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
