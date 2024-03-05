@@ -10,6 +10,7 @@ const jwt = require('./jwt/jwtUtils.js')
 const auth  = require('./routes/auth.js')
 const roomcontroller = require('./controllers/roomcontroller.js')
 dotenv.config();
+const cors = require('cors')
 const MONGO_URI = process.env.MONGO_URI  ;
  const PORT= process.env.PORT|| 3000 ;
 
@@ -26,6 +27,15 @@ const swaggerSpec = require('./swagger');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
+
+
+//CORS SITTINGS
+const corsOptions = {
+  origin: 'http://localhost:4200',// the client side dev origin 
+  //optionsSuccessStatus: 200, 
+};
+
+app.use(cors(corsOptions));
 //Mongo connct
 mongoose.connect(MONGO_URI)
   .then(() => {
