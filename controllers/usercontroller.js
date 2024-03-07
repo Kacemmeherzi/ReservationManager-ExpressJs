@@ -1,26 +1,8 @@
-const express = require('express');
-const router = express.Router() ;
-const User = require('../models/user.js') ;
+const express = require("express");
+const router = express.Router();
+const User = require("../models/user.js");
 
-/**
- * @swagger
- * servers:
- *   - url: http://localhost:3000
- *     description: Local development server
- * /user:
- *   get:
- *     summary: Get  all users 
- *     description: Retrieve all users by .
- *     parameters:
- *      
- * 
- *     responses:
- *       200:
- *         description: Successful response with the user details
- *       404:
- *         description: User not found
- */
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -29,65 +11,65 @@ router.get('/', async (req, res) => {
   }
 });
 
-
-router.get('/:id', async (req, res) => {
-    try {
-      const user = await User.findById(req.params.id);
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(404).json({ message: 'User not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: "User not found" });
     }
-  });
-  
-  // Create a new user
-  router.post('/adduser', async (req, res) => {
-    console.log(req.body.username) ;
-    console.log(req.body.password) ;
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
-    const newUser = new User({
-      username: req.body.username,
-      password: req.body.password,
-   
+// Create a new user
+router.post("/adduser", async (req, res) => {
+  console.log(req.body.username);
+  console.log(req.body.password);
+
+  const newUser = new User({
+    username: req.body.username,
+    password: req.body.password,
+  });
+  try {
+    const savedUser = await newUser.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Update an existing user
+router.put("/update/:id", async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
     });
-    try {
-      const savedUser = await newUser.save();
-      res.status(201).json(savedUser);
-    } catch (error) {
-      res.status(400).json({ message: error.message });
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ message: "User not found" });
     }
-  });
-  
-  // Update an existing user
-  router.put('/update/:id', async (req, res) => {
-    try {
-      const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (updatedUser) {
-        res.json(updatedUser);
-      } else {
-        res.status(404).json({ message: 'User not found' });
-      }
-    } catch (error) {
-      res.status(400).json({ "error type":error.name,"message": error.message });
+  } catch (error) {
+    res.status(400).json({ "error type": error.name, message: error.message });
+  }
+});
+
+// Delete a user
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const userid = req.params.id;
+    const deletedUser = await User.findByIdAndDelete(userid);
+    if (deletedUser) {
+      res.json({ message: "User deleted successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
     }
-  });
-  
-  // Delete a user
-  router.delete('/delete/:id', async (req, res) => {
-    try {
-      const userid = req.params.id
-      const deletedUser = await User.findByIdAndDelete(userid);
-      if (deletedUser) {
-        res.json({ message: 'User deleted successfully' });
-      } else {
-        res.status(404).json({ message: 'User not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ "error type":error.name ,"message": error.message});
-    }
-  });
-  
-  module.exports = router;
+  } catch (error) {
+    res.status(500).json({ "error type": error.name, message: error.message });
+  }
+});
+
+module.exports = router;
