@@ -1,7 +1,23 @@
 // Import the nodemailer module
 const nodemailer = require("nodemailer");
 
-async function sendMail(usermail) {
+
+//const mailOptions = {
+  //from: "roommanager11@hotmail.com",
+  //to: usermail,
+  //subject: "Test Email",
+  //text: "Hello, this is a test email from Nodemailer!",
+//};
+function comfiramtion_mail (user,token){
+  console.log(token);
+  return {
+    from: "roommanager11@hotmail.com",
+    to: user.email,
+    subject: "[TESTING] Confirm ur reservation  ",
+    html: "<h1>hey "+user.username+", hit this link to comfirm ur reservation , PEACE X)</h1><h2>link : http://localhost:3000/reservation/confirm/"+token+"</h2>"
+  };
+}
+async function sendMail(usermail,mailOptions) {
   // Create a transporter with your email service provider's SMTP settings
   const transporter = nodemailer.createTransport({
     host: "smtp-mail.outlook.com",
@@ -13,17 +29,11 @@ async function sendMail(usermail) {
     },
   });
 
-  // Set up the email content
-  const mailOptions = {
-    from: "roommanager11@hotmail.com",
-    to: usermail,
-    subject: "Test Email",
-    text: "Hello, this is a test email from Nodemailer!",
-  };
+  
 
   // Send the email
-
-  transporter.sendMail(mailOptions, (error, info) => {
+     
+  await transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
     } else {
@@ -31,4 +41,4 @@ async function sendMail(usermail) {
     }
   });
 }
-module.exports = { sendMail };
+module.exports = { sendMail ,comfiramtion_mail};
