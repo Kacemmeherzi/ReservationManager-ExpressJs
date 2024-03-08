@@ -3,6 +3,8 @@ const router = express.Router();
 const Reservation = require("../models/reservation.js");
 const User = require("../models/user.js");
 const Room = require("../models/room.js");
+const jwt = require ("../jwt/jwtUtils.js")
+const mailservice =require ("../notificationmanager/mailservice.js")
 router.get("/", async (req, res) => {
   const reservations = await Reservation.find()
     .populate("author", "username")
@@ -32,13 +34,28 @@ router.post("/add", async (req, res) => {
         room: room._id,
         duration,
       }).save();
-      
-      res.json(savedreservation);
+      const token = jwt.generateToken_comfirm(savedreservation._id)
+      const mailOptions = mailservice.comfiramtion_mail(user,token)
+      await mailservice.sendMail(user.email,mailOptions)
+      res.status(201).json({  "reservation": savedreservation});
+
     }
   } catch (err) {
     console.log(err.message);
     res.status(400).json({ "error type ": err.name, message: err.message });
   }
 });
+router.get("/confirm/:token",async(req,res)=>{
+    
+    const token = req.params.token
+    const  data = jwt.verifytoken(token)
+    if (data.valid){
+        console.log(data.payload.resid);
+     const reservation = await Reservation.findByIdAndUpdate(data.payload.resid,{"validation":true})
+        res.send("<h1> COMFIRMED </h1>")
+    }else {res.send("<h> ERROR </h1>")}
+    
+   
+})
 
 module.exports = router;
