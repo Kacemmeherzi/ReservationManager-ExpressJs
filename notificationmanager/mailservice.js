@@ -19,13 +19,17 @@ function comfiramtion_mail (user,token){
 }
 async function sendMail(usermail,mailOptions) {
   // Create a transporter with your email service provider's SMTP settings
+  //credentials
+  const mail = process.env.MAIL;
+  const password = process.env.PASSWORD;
+
   const transporter = nodemailer.createTransport({
     host: "smtp-mail.outlook.com",
     port: 587,
     secure: false,
     auth: {
-      user: "roommanager11@hotmail.com",
-      pass: "kacem@50522920",
+      user: mail,
+      pass:password ,
     },
   });
 
