@@ -6,7 +6,6 @@ function generateToken(user) {
   const secretKey = process.env.SECRET_KEY;
   const payload = {
     iss: "kacem",
-    
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 3600 * 2, // 2 heure
     customClaim: user._id,
