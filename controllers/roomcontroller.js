@@ -20,8 +20,8 @@ router.get("/:id", async (req, res) => {
 });
 router.post("/add", async (req, res) => {
   try {
-    const { roomNumber, roomBeds, floor } = req.body;
-    const room = new Room({ roomNumber, roomBeds, floor });
+    const { roomNumber, roomDesc } = req.body;
+    const room = new Room({ roomNumber, roomDesc });
 
     await Room.create(room);
     res.status(200).json(room);
