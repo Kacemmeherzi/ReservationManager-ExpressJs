@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment =require ('moment')
 const reservationshema = new mongoose.Schema(
   {
     owner: {
@@ -18,9 +19,9 @@ const reservationshema = new mongoose.Schema(
 
 reservationshema.pre("save", async function (next) {
   
-    const currentDate = new Date();
-    currentDate.setDate(this.started.getDate() + this.duration);
-    this.ended = currentDate;
+  const endDate = moment(this.started).add(this.duration ,'days')
+   
+    this.ended = endDate.toDate()
     next();
   
 });
