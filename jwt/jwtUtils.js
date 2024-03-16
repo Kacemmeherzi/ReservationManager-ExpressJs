@@ -9,7 +9,7 @@ function generateToken(user) {
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 3600 * 2, // 2 heure
     customClaim: user._id,
-    roles: ["admin", "user"],
+    roles:"user",
   };
   return jwt.sign(payload, secretKey);
 }
@@ -31,16 +31,24 @@ function verifytoken(token) {
 }
 //TODO :: refrech token methood
 
-
+// token gen for the reservation comfirmation 
 function generateToken_comfirm(reservation) {
   const secretKey = process.env.SECRET_KEY;
   const payload = {
     iss: "kacem",
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 3600 * 2, // 2 heure
+    exp: Math.floor(Date.now() / 1000) + 3600 * 2, // 2 hours
     resid: reservation._id,
-    roles: ["admin", "user"],
+    
   };
   return jwt.sign(payload, secretKey);
 }
-module.exports = { generateToken, verifytoken,generateToken_comfirm };
+
+
+async function has_admin_role (req,res,next){
+const payload = req.tokenpayload
+if (payload.roles==="admin")
+next()
+else {res.status(403).json({"message":"admin role required"})}
+}
+module.exports = { generateToken, verifytoken,generateToken_comfirm, has_admin_role };
