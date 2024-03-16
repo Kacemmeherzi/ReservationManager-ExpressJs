@@ -9,7 +9,7 @@ function extract_validate_Token(req, res, next) {
     console.log(jwt.verifytoken(token));
     const validity = jwt.verifytoken(token);
     if (validity.valid) {
-      req.tokenpayload = validity.payload
+      req.tokenpayload = validity.payload;
       console.log(validity.payload);
       next();
     } else {

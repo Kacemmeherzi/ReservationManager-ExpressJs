@@ -10,4 +10,3 @@ const roomshema = new mongoose.Schema(
 );
 const Room = mongoose.model("Room", roomshema);
 module.exports = Room;
-  

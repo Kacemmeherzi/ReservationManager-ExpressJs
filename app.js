@@ -16,10 +16,15 @@ const mailservice = require("./notificationmanager/mailservice.js");
 const reservationcontroller = require("./controllers/reservationcontroller.js");
 //ROUTES
 
-app.use("/user",jwtMiddleware,jwt.has_admin_role, userController);
+app.use("/user", jwtMiddleware, jwt.has_admin_role, userController);
 app.use("/auth", cors(), auth);
-app.use("/room",jwtMiddleware,jwt.has_admin_role, roomcontroller);
-app.use("/reservation",jwtMiddleware,jwt.has_admin_role, reservationcontroller);
+app.use("/room", jwtMiddleware, jwt.has_admin_role, roomcontroller);
+app.use(
+  "/reservation",
+  jwtMiddleware,
+  jwt.has_admin_role,
+  reservationcontroller,
+);
 
 //SWAGGER
 const swaggerUi = require("swagger-ui-express");
