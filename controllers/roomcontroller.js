@@ -41,7 +41,7 @@ router.delete("/delete/:id", async (req, res) => {
       res.status(404).json({ message: "room not found" });
     }
   } catch (err) {
-    res.status(400).json({ "error type": err.name, message: err.message });
+    res.status(400).json({ "error type": err.name, "message": err.message });
   }
 });
 
