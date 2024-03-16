@@ -1,50 +1,59 @@
 const express = require("express");
 const router = express.Router();
 const Reservation = require("../models/reservation.js");
-const User = require("../models/user.js");
-const Room = require("../models/room.js");
 const jwt = require ("../jwt/jwtUtils.js")
 const mailservice =require ("../notificationmanager/mailservice.js")
+const res_verification = require('../services/reservation_verifcation.js')
+const moment =require("moment")
 router.get("/", async (req, res) => {
   const reservations = await Reservation.find()
-    .populate("author", "username")
+    .populate("owner", "username")
     .populate("room")
     .exec();
   res.status(200).json(reservations);
 });
-router.post("/add", async (req, res) => {
-  const { authorid, roomid, duration } = req.body;
-  const user = await User.findById({ _id: authorid });
-  console.log(user);
-  const room = await Room.findById({ _id: roomid });
-  try {
-    if (!user) {
-      res.status(404).json({
-        message: "user not found",
-      });
-    } else if (!room) {
-      res.status(404).json({
-        message: "room not found",
-      });
-    } else if (await Reservation.findOne({ room: room._id })) {
-      res.status(400).json({ message: "room already taken" });
-    } else {
-      const savedreservation = await new Reservation({
-        author: user._id,
-        room: room._id,
-        duration,
-      }).save();
-      const token = jwt.generateToken_comfirm(savedreservation._id)
-      const mailOptions = mailservice.comfiramtion_mail(user,token)
-      await mailservice.sendMail(user.email,mailOptions)
-      res.status(201).json({  "reservation": savedreservation});
+router.post("/add",res_verification.verif_user,res_verification.verif_room, async (req, res) => {
 
-    }
-  } catch (err) {
-    console.log(err.message);
-    res.status(400).json({ "error type ": err.name, message: err.message });
+const user = req.user
+const room_id= req.body.roomid
+const req_duration =req.body.duration 
+const startedAt = moment(req.body.started)
+const endedAt  = startedAt.clone().add(req_duration,'days');
+
+//console.log(startedAt.toDate());
+
+const existingReservations = await Reservation.find({
+  $or: [
+    {
+      started: { $lte: startedAt.toDate() },
+      ended: { $gte: startedAt.toDate() }
+  },
+  {
+      started: { $lte: endedAt.toDate() },
+      ended: { $gte: endedAt.toDate() }
   }
+    
+   
+]
+})
+//console.log(existingReservations);
+if (existingReservations.length===0){
+  const reservation =await new Reservation({owner : user._id , room : room_id, started:startedAt.toDate() , duration :req_duration}).save()
+  
+  //console.log(reservation)
+  //create a token to send 
+  const token =  jwt.generateToken_comfirm(reservation)
+ //crete the email body 
+  const mailOptions = mailservice.comfiramtion_mail(user,token)
+ //send the mail
+ await mailservice.sendMail(mailOptions) 
+ res.status(201).json({"message":"added ,email comfirmation sended ","reservation": reservation})
+  
+}else{
+  res.status(400).json({"message":"periode already taken"})
+}
 });
+
 router.get("/confirm/:token",async(req,res)=>{
     
     const token = req.params.token
@@ -56,6 +65,9 @@ router.get("/confirm/:token",async(req,res)=>{
     }else {res.send("<h> ERROR </h1>")}
     
    
+})
+router.put('/update/id:',async(req,res)=>{
+
 })
 
 module.exports = router;
