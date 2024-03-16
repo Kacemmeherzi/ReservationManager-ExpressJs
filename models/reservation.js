@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 const reservationshema = new mongoose.Schema(
   {
-    author: {
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
     room: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
-    started: { type: Date, required: false, default: Date.now },
-    ended: { type: Date },
+    started: { type: Date, required: false },
+    ended: { type: Date, required : false },
     duration: { type: Number, required: true },
     validation: { type: Boolean, default: false },
   },
@@ -17,12 +17,12 @@ const reservationshema = new mongoose.Schema(
 );
 
 reservationshema.pre("save", async function (next) {
-  if (this.duration && !this.yourDateField) {
+  
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + this.duration);
+    currentDate.setDate(this.started.getDate() + this.duration);
     this.ended = currentDate;
     next();
-  }
+  
 });
 const Reservation = mongoose.model("Reservation", reservationshema);
 module.exports = Reservation;

@@ -6,6 +6,8 @@ async function  verif_user (req,res , next) {
     const req_userid = req.body.userid 
     const user = await User.findById(req_userid)
     if (user) {
+        req.user = user  
+        console.log(user);
         next()
 
         }else {
