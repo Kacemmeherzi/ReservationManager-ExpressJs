@@ -3,8 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 app.use(express.json());
-const User = require("./models/user.js");
-const tokenextract = require("./jwt/jwtMiddleware.js");
+const jwtMiddleware = require("./jwt/jwtMiddleware.js");
 const userController = require("./controllers/usercontroller.js");
 const jwt = require("./jwt/jwtUtils.js");
 const auth = require("./routes/auth.js");
@@ -17,10 +16,10 @@ const mailservice = require("./notificationmanager/mailservice.js");
 const reservationcontroller = require("./controllers/reservationcontroller.js");
 //ROUTES
 
-app.use("/proc/user", tokenextract, userController);
+app.use("/user",jwtMiddleware, userController);
 app.use("/auth", cors(), auth);
-app.use("/room", roomcontroller);
-app.use("/reservation", reservationcontroller);
+app.use("/room",jwtMiddleware, roomcontroller);
+app.use("/reservation",jwtMiddleware,jwt.has_admin_role, reservationcontroller);
 
 //SWAGGER
 const swaggerUi = require("swagger-ui-express");
