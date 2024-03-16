@@ -17,7 +17,7 @@ function comfiramtion_mail (user,token){
     html: "<h1>hey "+user.username+", hit this link to comfirm ur reservation , PEACE X)</h1><h2>link : http://localhost:3000/reservation/confirm/"+token+"</h2>"
   };
 }
-async function sendMail(usermail,mailOptions) {
+async function sendMail(mailOptions) {
   // Create a transporter with your email service provider's SMTP settings
   //credentials
   const mail = process.env.MAIL;
