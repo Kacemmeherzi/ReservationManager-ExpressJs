@@ -14,7 +14,18 @@ getallreservations :  async (req, res) => {
     .exec();
   res.status(200).json(reservations);
 } , 
-getreservationbyid : async(req,res) => {} ,
+getreservationbyid : async(req,res) => {
+  const res_id = req.params.id 
+try {
+
+  const reservation = await  Reservation.findById(res_id) 
+  if (reservation) { 
+    res.status(200).json(reservation)
+  }else {res.status(400).json({"message":"invalid reservation id "})}
+}catch(err){res.status(400).json({"message": err.message})}
+
+} ,
+//TODO
 deletereservationbyid  : async(req,res) => {} ,
 
  addreservation :  async (req, res) => {
@@ -80,6 +91,7 @@ confirmToken :  async (req, res) => {
     res.send("<h> ERROR </h1>");
   }
 },
+//TODO 
 updateReservation :  async (req, res) => {} }
 
 module.exports = reservationController;
