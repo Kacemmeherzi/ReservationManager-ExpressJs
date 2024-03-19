@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 app.use(express.json());
 const jwtMiddleware = require("./jwt/jwtMiddleware.js");
-const userRoutes = require('./routes/auth.js')
+const userRoutes = require('./routes/userRoutes.js')
 const jwt = require("./jwt/jwtUtils.js");
-const auth = require("./routes/auth.js");
+const authRoutes = require("./routes/authRoutes.js");
 const roomRoutes = require("./routes/roomRoutes.js");
 dotenv.config();
 const cors = require("cors");
@@ -15,9 +15,8 @@ const PORT = process.env.PORT || 3000;
 const mailservice = require("./notificationmanager/mailservice.js");
 const reservationRoutes = require("./routes/reservationRoutes.js");
 
-
 //ROUTES
-app.use("/auth", cors(), auth);
+app.use("/auth", cors(), authRoutes);
 app.use("/user", jwtMiddleware, jwt.has_admin_role, userRoutes);
 app.use("/room", jwtMiddleware, jwt.has_admin_role, roomRoutes);
 app.use("/reservation", jwtMiddleware,jwt.has_admin_role,reservationRoutes);
