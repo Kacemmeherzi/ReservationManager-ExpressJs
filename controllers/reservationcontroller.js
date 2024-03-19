@@ -6,7 +6,7 @@ const moment = require("moment");
 
 
 
-const reservationcontroller = {
+const reservationController = {
 getallreservations :  async (req, res) => {
   const reservations = await Reservation.find()
     .populate("owner", "username")
@@ -14,6 +14,8 @@ getallreservations :  async (req, res) => {
     .exec();
   res.status(200).json(reservations);
 } , 
+getreservationbyid : async(req,res) => {} ,
+deletereservationbyid  : async(req,res) => {} ,
 
  addreservation :  async (req, res) => {
     const user = req.user;
@@ -80,4 +82,4 @@ confirmToken :  async (req, res) => {
 },
 updateReservation :  async (req, res) => {} }
 
-module.exports = reservationcontroller;
+module.exports = reservationController;
