@@ -1,22 +1,21 @@
 const express = require("express");
-const router = express.Router();
 const Reservation = require("../models/reservation.js");
 const jwt = require("../jwt/jwtUtils.js");
 const mailservice = require("../notificationmanager/mailservice.js");
-const res_verification = require("../services/reservation_verifcation.js");
 const moment = require("moment");
-router.get("/", async (req, res) => {
+
+
+
+const reservationcontroller = {
+getallreservations :  async (req, res) => {
   const reservations = await Reservation.find()
     .populate("owner", "username")
     .populate("room")
     .exec();
   res.status(200).json(reservations);
-});
-router.post(
-  "/add",
-  res_verification.verif_user,
-  res_verification.verif_room,
-  async (req, res) => {
+} , 
+
+ addreservation :  async (req, res) => {
     const user = req.user;
     const room_id = req.body.roomid;
     const req_duration = req.body.duration;
@@ -63,9 +62,9 @@ router.post(
       res.status(400).json({ message: "periode already taken" });
     }
   },
-);
 
-router.get("/confirm/:token", async (req, res) => {
+
+confirmToken :  async (req, res) => {
   const token = req.params.token;
   const data = jwt.verifytoken(token);
   if (data.valid) {
@@ -78,7 +77,7 @@ router.get("/confirm/:token", async (req, res) => {
   } else {
     res.send("<h> ERROR </h1>");
   }
-});
-router.put("/update/id:", async (req, res) => {});
+},
+updateReservation :  async (req, res) => {} }
 
-module.exports = router;
+module.exports = reservationcontroller;
