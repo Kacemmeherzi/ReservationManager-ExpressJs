@@ -13,3 +13,4 @@ router.post('/add',res_verification.verif_user,res_verification.verif_room,reser
 router.delete('/delete/:id',reservationController.deletereservationbyid)
 router.put('/update/:id', reservationController.updateReservation)
 
+module.exports = router
