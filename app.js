@@ -4,27 +4,23 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 app.use(express.json());
 const jwtMiddleware = require("./jwt/jwtMiddleware.js");
-const userRoutes = require("./routes/userRoutes.js");
+const userRoutes = require('./routes/auth.js')
 const jwt = require("./jwt/jwtUtils.js");
 const auth = require("./routes/auth.js");
-const roomcontroller = require("./controllers/roomcontroller.js");
+const roomRoutes = require("./routes/roomRoutes.js");
 dotenv.config();
 const cors = require("cors");
 const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3000;
 const mailservice = require("./notificationmanager/mailservice.js");
 const reservationcontroller = require("./controllers/reservationcontroller.js");
-//ROUTES
 
-app.use("/user", jwtMiddleware, jwt.has_admin_role, userRoutes);
+
+//ROUTES
 app.use("/auth", cors(), auth);
-app.use("/room", jwtMiddleware, jwt.has_admin_role, roomcontroller);
-app.use(
-  "/reservation",
-  jwtMiddleware,
-  jwt.has_admin_role,
-  reservationcontroller,
-);
+app.use("/user", jwtMiddleware, jwt.has_admin_role, userRoutes);
+app.use("/room", jwtMiddleware, jwt.has_admin_role, roomRoutes);
+app.use("/reservation", jwtMiddleware,jwt.has_admin_role,reservationcontroller,);
 
 //SWAGGER
 const swaggerUi = require("swagger-ui-express");
