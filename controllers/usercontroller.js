@@ -1,17 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user.js");
-
-router.get("/", async (req, res) => {
+const userController = {
+getallusers : async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+},
 
-router.get("/:id", async (req, res) => {
+getuserbyid : async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (user) {
@@ -22,10 +22,10 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+},
 
 // Create a new user
-router.post("/adduser", async (req, res) => {
+adduser :  async (req, res) => {
   console.log(req.body.username);
   console.log(req.body.password);
 
@@ -39,10 +39,10 @@ router.post("/adduser", async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-});
+},
 
 // Update an existing user
-router.put("/update/:id", async (req, res) => {
+updateuser :async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -55,10 +55,10 @@ router.put("/update/:id", async (req, res) => {
   } catch (error) {
     res.status(400).json({ "error type": error.name, message: error.message });
   }
-});
+},
 
 // Delete a user
-router.delete("/delete/:id", async (req, res) => {
+deleteuserbyid :  async (req, res) => {
   try {
     const userid = req.params.id;
     const deletedUser = await User.findByIdAndDelete(userid);
@@ -70,6 +70,6 @@ router.delete("/delete/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ "error type": error.name, message: error.message });
   }
-});
+}}
 
-module.exports = router;
+module.exports = userController;
