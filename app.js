@@ -13,14 +13,14 @@ const cors = require("cors");
 const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT || 3000;
 const mailservice = require("./notificationmanager/mailservice.js");
-const reservationcontroller = require("./controllers/reservationcontroller.js");
+const reservationRoutes = require("./routes/reservationRoutes.js");
 
 
 //ROUTES
 app.use("/auth", cors(), auth);
 app.use("/user", jwtMiddleware, jwt.has_admin_role, userRoutes);
 app.use("/room", jwtMiddleware, jwt.has_admin_role, roomRoutes);
-app.use("/reservation", jwtMiddleware,jwt.has_admin_role,reservationcontroller,);
+app.use("/reservation", jwtMiddleware,jwt.has_admin_role,reservationRoutes);
 
 //SWAGGER
 const swaggerUi = require("swagger-ui-express");
@@ -35,7 +35,7 @@ app.post("/testmail", async (req, res) => {
 
 //CORS SITTINGS
 const corsOptions = {
-  origin: "http://localhost:4200", // the client side dev origin
+  origin: "http://localhost:4200/", // the client side dev origin
   //optionsSuccessStatus: 200,
 };
 //app.use(cors(corsOptions));
