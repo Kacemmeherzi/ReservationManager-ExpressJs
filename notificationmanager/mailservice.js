@@ -8,9 +8,11 @@ const nodemailer = require("nodemailer");
 //text: "Hello, this is a test email from Nodemailer!",
 //};
 function comfiramtion_mail(user, token) {
+  const mail = process.env.MAIL;
+
   console.log(token);
   return {
-    from: "roommanager11@hotmail.com",
+    from: mail,
     to: user.email,
     subject: "[TESTING] Confirm ur reservation  ",
     html:
