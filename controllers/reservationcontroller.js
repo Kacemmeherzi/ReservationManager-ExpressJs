@@ -39,6 +39,16 @@ deletereservationbyid  : async(req,res) => {
 
 } ,
 
+reservationbyuserid : async (req,res) => {
+  try {
+    const userid = req.params.id
+const reservations =await  Reservation.find({owner : userid})
+console.log(reservations);
+res.status(200).json(reservations)
+
+  }catch(err){res.status(400).json({"message":err.message})}
+} ,
+
  addreservation :  async (req, res) => {
     const user = req.user;
     const room_id = req.body.roomid;
