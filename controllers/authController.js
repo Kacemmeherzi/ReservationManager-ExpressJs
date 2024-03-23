@@ -12,7 +12,7 @@ login :  async (req, res) => {
       const valid = await bcrypt.compare(password, user.password);
       if (valid) {
         const token = jwt.generateToken(user);
-        res.status(200).json({ message: "connected", token: token });
+        res.status(200).json({ message: "connected", token: token , "user": user});
       } else {
         res.status(406).json({ message: "wrong password" });
       }
