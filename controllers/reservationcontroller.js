@@ -15,9 +15,9 @@ getallreservations :  async (req, res) => {
   res.status(200).json(reservations);
 } , 
 getreservationbyid : async(req,res) => {
-  const res_id = req.params.id 
-try {
 
+try {
+  const res_id = req.params.id 
   const reservation = await  Reservation.findById(res_id) 
   if (reservation) { 
     res.status(200).json(reservation)
@@ -26,7 +26,18 @@ try {
 
 } ,
 //TODO
-deletereservationbyid  : async(req,res) => {} ,
+deletereservationbyid  : async(req,res) => {
+  try {
+    const res_id = req.params.id 
+    const reservation = await  Reservation.findById(res_id) 
+    if (reservation) { 
+      await Reservation.findByIdAndDelete(res_id) 
+      res.status(200).json({"message":"deleted"})
+    }else {res.status(400).json({"message":"invalid reservation id "})}
+  }catch(err){res.status(400).json({"message": err.message})}
+  
+
+} ,
 
  addreservation :  async (req, res) => {
     const user = req.user;
