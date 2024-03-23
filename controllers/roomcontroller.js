@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Room = require("../models/room.js");
+const Reservation = require('../models/reservation.js')
 const roomController = {
 getallrooms : async (req, res) => {
   try {
@@ -9,7 +10,15 @@ getallrooms : async (req, res) => {
   } catch (err) {
     res.status(400).json({ "error type": err.name, message: err.message });
   }
+ 
 },
+getunreservedrooms : async (req ,res ) =>{
+const reservations = await Reservation.find()
+const rooms = await Room.find() 
+const unreservedrooms = rooms.filter((room)=> !reservations.some(reservation=>reservation.room ===room._id))
+res.status(200).json(unreservedrooms)
+
+} ,
 getroombyid :  async (req, res) => {
   try {
     const room = await Room.findById(req.params.id);
@@ -21,7 +30,7 @@ getroombyid :  async (req, res) => {
 addroom : async (req, res) => {
   try {
     const { roomNumber, roomDesc } = req.body;
-    const room = new Room({ roomNumber, roomDesc });
+    const room = new Room({ roomNumber, roomDesc, RoomName });
 
     await Room.create(room);
     res.status(200).json(room);
