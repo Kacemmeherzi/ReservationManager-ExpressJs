@@ -7,6 +7,23 @@ const nodemailer = require("nodemailer");
 //subject: "Test Email",
 //text: "Hello, this is a test email from Nodemailer!",
 //};
+function createmailbody(user, token , operation){
+  const mail = process.env.MAIL;
+
+  console.log(token);
+  return {
+    from: mail,
+    to: user.email,
+    subject: "[TESTING] Confirm ur reservation  ",
+    html:
+      "<h1>hey " +
+      user.username +"would u like to   "+operation+
+      
+      ", hit this link to comfirm ur reservation , PEACE X)</h1><h2>link : http://localhost:3000/operation/confirm/" +
+      token +
+      "</h2>",
+  };
+}
 function comfiramtion_mail(user, token) {
   const mail = process.env.MAIL;
 
@@ -18,7 +35,7 @@ function comfiramtion_mail(user, token) {
     html:
       "<h1>hey " +
       user.username +
-      ", hit this link to comfirm ur reservation , PEACE X)</h1><h2>link : http://localhost:3000/reservation/confirm/" +
+      ", hit this link to comfirm ur reservation , PEACE X)</h1><h2>link : http://localhost:3000/confirm/" +
       token +
       "</h2>",
   };
@@ -49,4 +66,4 @@ async function sendMail(mailOptions) {
     }
   });
 }
-module.exports = { sendMail, comfiramtion_mail };
+module.exports = { sendMail, comfiramtion_mail,createmailbody };
