@@ -7,9 +7,9 @@ function generateToken(user) {
   const payload = {
     iss: "kacem",
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 3600 * 2, // 2 heure
+    exp: Math.floor(Date.now() / 1000) + 3600 * 10, // 2 heure
     customClaim: user._id,
-    roles: "user",
+    roles: user.role,
   };
   return jwt.sign(payload, secretKey);
 }
@@ -34,13 +34,13 @@ function verifytoken(token) {
 //TODO :: refrech token methood
 
 // token gen for the reservation comfirmation
-function generateToken_comfirm(reservation) {
+function generateToken_comfirm(id) {
   const secretKey = process.env.SECRET_KEY;
   const payload = {
     iss: "kacem",
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 3600 * 2, // 2 hours
-    resid: reservation._id,
+    resid: id,
   };
   return jwt.sign(payload, secretKey);
 }
