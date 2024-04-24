@@ -10,17 +10,15 @@ const reservationshema = new mongoose.Schema(
 
     room: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
     started: { type: Date, required: false },
-    ended: { type: Date, required: false },
-    duration: { type: Number, required: true },
+    ended: { type: Date, required: true },
+    duration: { type: Number, required: false },
     validation: { type: Boolean, default: false },
   },
   { collection: "reservations" },
 );
 
 reservationshema.pre("save", async function (next) {
-  const endDate = moment(this.started).add(this.duration, "days");
 
-  this.ended = endDate.toDate();
   next();
 });
 const Reservation = mongoose.model("Reservation", reservationshema);
