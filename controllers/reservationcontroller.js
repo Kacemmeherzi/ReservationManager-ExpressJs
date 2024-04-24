@@ -42,21 +42,26 @@ deletereservationbyid  : async(req,res) => {
 reservationbyuserid : async (req,res) => {
   try {
     const userid = req.params.id
-const reservations =await  Reservation.find({owner : userid})
-console.log(reservations);
+const reservations =await  Reservation.find({owner : userid}).populate('room').exec()
 res.status(200).json(reservations)
 
   }catch(err){res.status(400).json({"message":err.message})}
 } ,
 
  addreservation :  async (req, res) => {
+
     const user = req.user;
     const room_id = req.body.roomid;
     const req_duration = req.body.duration;
-    const startedAt = moment(req.body.started);
-    const endedAt = startedAt.clone().add(req_duration, "days");
+    const endwTimeSpan = moment(req.body.ended)
+    const startwTimeSpan = moment(req.body.started);
+    console.log(req.body.started+"        aaaaaaaaaaa")
+    console.log(startwTimeSpan)
+    const startedAt = startwTimeSpan.utcOffset(0)
+    const endedAt = endwTimeSpan.utcOffset(0)
 
-    //console.log(startedAt.toDate());
+       console.log(startedAt);
+       console.log(endedAt) ;
 
     const existingReservations = await Reservation.find({
       $or: [
@@ -69,14 +74,17 @@ res.status(200).json(reservations)
           ended: { $gte: endedAt.toDate() },
         },
       ],
-    });
+      room : req.roomid  
+
+      
+    }).exec();
     //console.log(existingReservations);
     if (existingReservations.length === 0) {
       const reservation = await new Reservation({
         owner: user._id,
         room: room_id,
         started: startedAt.toDate(),
-        duration: req_duration,
+         ended : endedAt.toDate(),
       }).save();
 
       //console.log(reservation)
@@ -97,22 +105,28 @@ res.status(200).json(reservations)
     }
   },
 
+  confirmToken :  async (req, res) => {
+    const token = req.params.token;
+    const data = jwt.verifytoken(token);
+    if (data.valid) {
+      console.log(data.payload.resid);
+      const reservation = await Reservation.findByIdAndUpdate(
+        data.payload.resid,
+        { validation: true },
+      );
+      res.send("<h1> COMFIRMED </h1>");
+    } else {
+      res.send("<h> ERROR </h1>");
+    }
+  },
 
-confirmToken :  async (req, res) => {
-  const token = req.params.token;
-  const data = jwt.verifytoken(token);
-  if (data.valid) {
-    console.log(data.payload.resid);
-    const reservation = await Reservation.findByIdAndUpdate(
-      data.payload.resid,
-      { validation: true },
-    );
-    res.send("<h1> COMFIRMED </h1>");
-  } else {
-    res.send("<h> ERROR </h1>");
-  }
-},
 //TODO 
-updateReservation :  async (req, res) => {} }
+updateReservation :  async (req, res) => {} 
+,availibility_by_day : async (req,res)=>{
+  const start = req.body.start
+  const ended = req.body.ended
+  
+  
+}}
 
 module.exports = reservationController;
