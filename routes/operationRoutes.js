@@ -5,6 +5,6 @@ const OperationController = require('../controllers/OperationController.js')
 
 router.post('/createop',OperationController.createOperation)
 
-router.post('/confirmoperation',OperationController.confirmToken)
+router.post('/confirmoperation/:token',OperationController.confirmToken)
 
 module.exports = router;
