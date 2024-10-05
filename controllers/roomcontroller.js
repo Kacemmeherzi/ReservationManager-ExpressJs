@@ -29,7 +29,7 @@ getroombyid :  async (req, res) => {
 },
 addroom : async (req, res) => {
   try {
-    const { roomNumber, roomDesc } = req.body;
+    const { roomNumber, roomDesc , RoomName} = req.body;
     const room = new Room({ roomNumber, roomDesc, RoomName });
 
     await Room.create(room);
