@@ -35,7 +35,7 @@ function comfiramtion_mail(user, token) {
     html:
       "<h1>hey " +
       user.username +
-      ", hit this link to comfirm ur reservation , PEACE X)</h1><h2>link : http://localhost:3000/confirm/" +
+      ", hit this link to comfirm ur reservation , PEACE X)</h1><h2>link : http://localhost:3000/reservation/confirm/" +
       token +
       "</h2>",
   };
