@@ -26,9 +26,9 @@ const corsOptions = {
 app.use(cors());
 //ROUTES
 app.use("/auth", cors(), authRoutes);
-app.use("/user", cors(),jwtMiddleware, jwt.has_admin_role, userRoutes);
-app.use("/room",cors(), jwtMiddleware, jwt.has_admin_role, roomRoutes);
-app.use("/reservation", jwtMiddleware,jwt.has_admin_role,reservationRoutes);
+app.use("/user", cors(),jwtMiddleware, userRoutes);
+app.use("/room",cors(), jwtMiddleware, roomRoutes);
+app.use("/reservation",reservationRoutes);
 app.use("/operation", operationRoutes);
 app.use("/confirm", reservationController.confirmToken);
 
